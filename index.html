@@ -165,6 +165,8 @@ body>*{position:relative;z-index:1}
 }
 .worker-btn.active{color:var(--smoke)}
 .worker-btn .wname{font-size:13px;line-height:1}
+/* Prevent child elements from intercepting clicks */
+.worker-btn *{pointer-events:none}
 
 /* ── Form fields ─────────────────────────────────── */
 .field{
@@ -540,9 +542,12 @@ body>*{position:relative;z-index:1}
 // ════════════════════════════════════════
 //  INIT
 // ════════════════════════════════════════
-let selectedWorker = CONFIG.workers[0];
+let selectedWorker = null;
 
 document.addEventListener('DOMContentLoaded', () => {
+  // Init selectedWorker here so CONFIG is guaranteed loaded
+  selectedWorker = CONFIG.workers[0];
+
   // Check setup
   if (!CONFIG.googleScriptUrl || CONFIG.googleScriptUrl === 'YOUR_GOOGLE_SCRIPT_URL_HERE') {
     document.getElementById('setup-banner').style.display = 'flex';
@@ -554,11 +559,12 @@ document.addEventListener('DOMContentLoaded', () => {
     const initials = w.name.split(' ').map(n => n[0]).join('');
     const btn = document.createElement('button');
     btn.className = 'worker-btn' + (i === 0 ? ' active' : '');
+    btn.dataset.index = i;
     btn.innerHTML = `
       <div class="avatar">${initials}</div>
       <div class="wname">${w.name.split(' ')[0]}</div>
     `;
-    btn.onclick = () => selectWorker(w, btn);
+    btn.addEventListener('click', () => selectWorker(w, btn));
     grid.appendChild(btn);
   });
 
