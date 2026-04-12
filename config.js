@@ -7,12 +7,12 @@ const CONFIG = {
 
   // Paste your Google Apps Script deployment URL here
   // (From: Extensions → Apps Script → Deploy → New deployment → Web app)
-  googleScriptUrl: https://script.google.com/macros/s/AKfycbzSpXbcSTGPJ-NYo0W2qg9eBmGn7vq91M7ERZRWk6Kp_KU6ZLKjD901m2-m3vE1jLnA/exec,
+  googleScriptUrl: "YOUR_GOOGLE_SCRIPT_URL_HERE",
 
   // Workers
   workers: [
-    { name: "Tyler Grosser",  rate: 25.00 },
-    { name: "Aaron Grosser",  rate: 25.00 },
+    { name: "Tyler Grosser",  rate: 15.00 },
+    { name: "Aaron Grosser",  rate: 15.00 },
   ],
 
   // CA Tax Rates 2024 — update if rates change
