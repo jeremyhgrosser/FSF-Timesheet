@@ -9,7 +9,15 @@ function doPost(e) {
   const ss = SpreadsheetApp.openById(SPREADSHEET_ID);
 
   try {
-    const data = JSON.parse(e.postData.contents);
+    // Supports both URLSearchParams (e.parameter) and JSON (e.postData)
+    let data;
+    if (e.parameter && e.parameter.worker) {
+      data = e.parameter;
+    } else if (e.postData && e.postData.contents) {
+      data = JSON.parse(e.postData.contents);
+    } else {
+      throw new Error('No data received');
+    }
     const workerName = data.worker || "Unknown";
 
     // Get or create a sheet tab for this worker

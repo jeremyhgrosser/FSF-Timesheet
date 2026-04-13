@@ -11,8 +11,8 @@ const CONFIG = {
 
   // Workers
   workers: [
-    { name: "Tyler Grosser",  rate: 15.00 },
-    { name: "Aaron Grosser",  rate: 15.00 },
+    { name: "Tyler Grosser",  rate: 25.00 },
+    { name: "Aaron Grosser",  rate: 25.00 },
   ],
 
   // CA Tax Rates 2024 — update if rates change

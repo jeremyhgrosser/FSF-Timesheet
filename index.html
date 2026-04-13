@@ -512,7 +512,7 @@ body > * { position: relative; z-index: 1; }
     </button>
   </div>
 
-  <div class="app-footer">Rev 1.3 · Fire Sky Farm Timesheet</div>
+  <div class="app-footer">Rev 1.5 · Fire Sky Farm Timesheet</div>
 
 </div><!-- /entry-section -->
 
@@ -520,7 +520,7 @@ body > * { position: relative; z-index: 1; }
 <div id="history-section" style="display:none">
   <span class="section-label">This Month's Entries</span>
   <div id="historyList"></div>
-  <div class="app-footer">Rev 1.3 · Fire Sky Farm Timesheet</div>
+  <div class="app-footer">Rev 1.5 · Fire Sky Farm Timesheet</div>
 </div>
 
 <!-- ── Bottom Nav ── -->
@@ -695,10 +695,15 @@ async function submitEntry() {
   lbl.innerHTML = '<div class="spinner"></div>&nbsp; Saving…';
 
   try {
+    // URLSearchParams works reliably with no-cors + Google Apps Script
+    // Apps Script reads it via e.parameter instead of e.postData
+    const formData = new URLSearchParams();
+    Object.entries(payload).forEach(([k, v]) => formData.append(k, v));
+
     await fetch(CONFIG.googleScriptUrl, {
-      method: 'POST', mode: 'no-cors',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(payload),
+      method: 'POST',
+      mode: 'no-cors',
+      body: formData,
     });
     saveLocal({ ...payload, gross: p.gross, net: p.net });
     showToast('Saved to Google Sheets ✓', 'success');
