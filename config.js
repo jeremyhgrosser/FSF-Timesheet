@@ -7,7 +7,7 @@ const CONFIG = {
 
   // Paste your Google Apps Script deployment URL here
   // (From: Extensions → Apps Script → Deploy → New deployment → Web app)
-  googleScriptUrl: https://script.google.com/macros/s/AKfycbx3yOYvJ4WL_05A6PSAFA3tVdvnDYxXu9FMqi8PmKr16xJYbqQSDoLLiT000cLomBAU/exec,
+  googleScriptUrl: "https://script.google.com/macros/s/AKfycbx3yOYvJ4WL_05A6PSAFA3tVdvnDYxXu9FMqi8PmKr16xJYbqQSDoLLiT000cLomBAU/exec",
 
   // Workers
   workers: [
