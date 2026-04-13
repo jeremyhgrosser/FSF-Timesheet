@@ -481,7 +481,7 @@ body > * { position: relative; z-index: 1; }
     </div>
     <div class="field">
       <label>Notes (optional)</label>
-      <input type="text" id="notes" placeholder="e.g. feeding, fencing, kidding watch…"/>
+      <input type="text" id="notes" placeholder="Required — e.g. feeding, fencing, kidding watch…"/>
     </div>
   </div>
 
@@ -512,7 +512,7 @@ body > * { position: relative; z-index: 1; }
     </button>
   </div>
 
-  <div class="app-footer">Rev 1.7 · Fire Sky Farm Timesheet</div>
+  <div class="app-footer">Rev 1.8 · Fire Sky Farm Timesheet</div>
 
 </div><!-- /entry-section -->
 
@@ -520,7 +520,7 @@ body > * { position: relative; z-index: 1; }
 <div id="history-section" style="display:none">
   <span class="section-label">This Month's Entries</span>
   <div id="historyList"></div>
-  <div class="app-footer">Rev 1.7 · Fire Sky Farm Timesheet</div>
+  <div class="app-footer">Rev 1.8 · Fire Sky Farm Timesheet</div>
 </div>
 
 <!-- ── Bottom Nav ── -->
@@ -676,6 +676,7 @@ async function submitEntry() {
   if (!tIn || !tOut) { showToast('Please select time in and out', 'error'); return; }
   const p = calcPay();
   if (!p)            { showToast('Time out must be after time in', 'error'); return; }
+  if (!notes || notes.trim().length < 8) { showToast('Notes must be at least 8 characters', 'error'); return; }
 
   const payload = {
     worker: selectedWorker.name, date,
