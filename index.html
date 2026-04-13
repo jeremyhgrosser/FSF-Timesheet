@@ -475,8 +475,8 @@ body > * { position: relative; z-index: 1; }
         </div>
       </div>
       <div class="field">
-        <label>Hourly Rate ($)</label>
-        <input type="number" id="hourlyRate" min="1" step="0.25" placeholder="15.00"/>
+        <label>Hourly Rate</label>
+        <input type="text" id="hourlyRate" readonly style="background:var(--parchment);color:var(--text-light);cursor:default;"/>
       </div>
     </div>
     <div class="field">
@@ -512,7 +512,7 @@ body > * { position: relative; z-index: 1; }
     </button>
   </div>
 
-  <div class="app-footer">Rev 1.5 · Fire Sky Farm Timesheet</div>
+  <div class="app-footer">Rev 1.7 · Fire Sky Farm Timesheet</div>
 
 </div><!-- /entry-section -->
 
@@ -520,7 +520,7 @@ body > * { position: relative; z-index: 1; }
 <div id="history-section" style="display:none">
   <span class="section-label">This Month's Entries</span>
   <div id="historyList"></div>
-  <div class="app-footer">Rev 1.5 · Fire Sky Farm Timesheet</div>
+  <div class="app-footer">Rev 1.7 · Fire Sky Farm Timesheet</div>
 </div>
 
 <!-- ── Bottom Nav ── -->
@@ -542,11 +542,12 @@ body > * { position: relative; z-index: 1; }
 // ════════════════════════════════════
 function buildTimeOptions() {
   const opts = [];
-  for (let h = 0; h < 24; h++) {
+  for (let h = 6; h <= 22; h++) {
     for (let m = 0; m < 60; m += 15) {
+      if (h === 22 && m > 0) break; // stop at 10:00 PM
       const val   = `${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}`;
       const ampm  = h < 12 ? 'AM' : 'PM';
-      const h12   = h === 0 ? 12 : h > 12 ? h - 12 : h;
+      const h12   = h === 12 ? 12 : h > 12 ? h - 12 : h;
       const label = `${h12}:${String(m).padStart(2,'0')} ${ampm}`;
       opts.push({ val, label });
     }
@@ -592,14 +593,14 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   document.getElementById('workDate').value   = new Date().toISOString().split('T')[0];
-  document.getElementById('hourlyRate').value = selectedWorker.rate.toFixed(2);
+  document.getElementById('hourlyRate').value = '$' + selectedWorker.rate.toFixed(2) + ' / hr';
   document.getElementById('timeIn').value     = '07:00';
   document.getElementById('timeOut').value    = '15:30';
 
   ['timeIn','timeOut','breakHrs'].forEach(id =>
     document.getElementById(id).addEventListener('change', recalc)
   );
-  document.getElementById('hourlyRate').addEventListener('input', recalc);
+  // hourlyRate is read-only, set from config only
   recalc();
 });
 
@@ -607,7 +608,7 @@ function selectWorker(w, btn) {
   selectedWorker = w;
   document.querySelectorAll('.worker-btn').forEach(b => b.classList.remove('active'));
   btn.classList.add('active');
-  document.getElementById('hourlyRate').value = w.rate.toFixed(2);
+  document.getElementById('hourlyRate').value = '$' + w.rate.toFixed(2) + ' / hr';
   recalc();
 }
 
@@ -626,7 +627,7 @@ function calcPay() {
   const tIn  = document.getElementById('timeIn').value;
   const tOut = document.getElementById('timeOut').value;
   const brk  = parseFloat(document.getElementById('breakHrs').value) || 0;
-  const rate = parseFloat(document.getElementById('hourlyRate').value) || 0;
+  const rate = selectedWorker ? selectedWorker.rate : 0;
   if (!tIn || !tOut || rate <= 0) return null;
   const [ih, im] = tIn.split(':').map(Number);
   const [oh, om] = tOut.split(':').map(Number);
